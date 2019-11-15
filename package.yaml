@@ -1,0 +1,50 @@
+name:                host
+version:             0.1.0.0
+github:              "jakobrs/host"
+author:              "Jakob Rødal Skaar"
+maintainer:          "jakobrs100@gmail.com"
+copyright:           "2019 Jakob Rødal Skaar"
+
+extra-source-files:
+- README.md
+- ChangeLog.md
+
+synopsis:            Host a folder as a web page
+#category:            Web
+
+description:         Please see the README on GitHub at <https://github.com/jakobrs/host#readme>
+
+dependencies:
+- base >= 4.7 && < 5
+- wai
+- warp
+- http-types
+- filepath
+- bytestring
+- directory
+- text
+- warp-tls
+- pandoc
+
+#library:
+#  source-dirs: src
+
+executables:
+  host-exe:
+    main:                Main.hs
+    source-dirs:         app
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+
+#tests:
+#  host-test:
+#    main:                Spec.hs
+#    source-dirs:         test
+#    ghc-options:
+#    - -threaded
+#    - -rtsopts
+#    - -with-rtsopts=-N
+#    dependencies:
+#    - host
