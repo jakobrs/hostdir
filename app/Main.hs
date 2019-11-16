@@ -20,21 +20,6 @@ import           Text.Pandoc
 import Settings
 import Opts
 
-{-
-
-  > hostdir [options]
-
-  Arguments:
-    --port        -p <port>         What port to listen on         (default: 8080)
-    --host        -h <host>         What host to listen on         (default: 127.0.0.1)
-    --root        -r <root>         Root directory                 (default: .)
-    --path           <path>         How to find the files
-    --404            <page>         404                            (default: 404.html)
-
-  Default path: "%:%/index.html:%.html"
-
--}
-
 first :: Monad m => [a] -> (a -> m Bool) -> m (Maybe a)
 first []      _ = pure $ Nothing
 first (a : b) f = f a >>= \case
