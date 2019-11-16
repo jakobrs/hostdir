@@ -4,6 +4,7 @@ module Main where
 
 import           Control.Monad
 import qualified Data.ByteString.Lazy      as BSL
+import           Data.String
 import qualified Data.Text                 as Text
 import qualified Data.Text.Encoding        as Text
 import           Network.Wai
@@ -94,8 +95,16 @@ main = do
   when (hhostHelp settings) $ do
     putStrLn $ "host v" ++ VERSION_host ++ ", compiled " ++ __TIME__
     putStr   $ usageInfo "" optDescrs
+    putStrLn ""
+    putStrLn "Valid arguments to --host:"
+    putStrLn "- *   Any host, both IPv4 and IPv6"
+    putStrLn "- *4  Any host, prefer IPv4"
+    putStrLn "- *6  Any host, prefer IPv6"
+    putStrLn "- !4  Any host, only IPv4"
+    putStrLn "- !6  Any host, only IPv6"
+    putStrLn "Any other value is treated as a normal hostname."
     exitSuccess
 
   putStrLn $ "Hosting folder " ++ hhostRoot settings ++ " on " ++ hhostHost settings ++ ":" ++ show (hhostPort settings)
 
-  Warp.runSettings (Warp.setPort (hhostPort settings) Warp.defaultSettings) (app settings)
+  Warp.runSettings (Warp.setHost (fromString (hhostHost settings)) (Warp.setPort (hhostPort settings) Warp.defaultSettings)) (app settings)
