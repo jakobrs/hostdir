@@ -35,7 +35,7 @@ default-extensions:
 #  source-dirs: src
 
 executables:
-  host-exe:
+  hostdir:
     main:                Main.hs
     source-dirs:         app
     ghc-options:
