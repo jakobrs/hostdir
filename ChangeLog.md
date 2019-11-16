@@ -1,3 +1,3 @@
-# Changelog for host
+# Changelog for hostdir
 
 ## Unreleased changes

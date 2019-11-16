@@ -94,9 +94,9 @@ main = do
 
   when (hhostHelp settings) $ do
 #ifdef RELEASE
-    putStrLn $ "host v" ++ VERSION_host
+    putStrLn $ "hostdir v" ++ VERSION_hostdir
 #else
-    putStrLn $ "host v" ++ VERSION_host ++ ", compiled " ++ __DATE__ ++ " " ++ __TIME__
+    putStrLn $ "hostdir v" ++ VERSION_hostdir ++ ", compiled " ++ __DATE__ ++ " " ++ __TIME__
 #endif
     putStr   $ usageInfo "" optDescrs
     putStrLn ""

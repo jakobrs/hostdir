@@ -1,6 +1,8 @@
-name:                host
+name:                hostdir
 version:             0.1.0.0
 github:              "jakobrs/host"
+github:              "jakobrs/hostdir"
+license:             MIT
 author:              "Jakob Rødal Skaar"
 maintainer:          "jakobrs100@gmail.com"
 copyright:           "2019 Jakob Rødal Skaar"
@@ -12,7 +14,7 @@ extra-source-files:
 synopsis:            Host a folder as a web page
 #category:            Web
 
-description:         Please see the README on GitHub at <https://github.com/jakobrs/host#readme>
+description:         See README.md
 
 dependencies:
 - base >= 4.7 && < 5
