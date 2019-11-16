@@ -96,6 +96,6 @@ main = do
     putStr   $ usageInfo "" optDescrs
     exitSuccess
 
-  putStrLn $ "Hosting folder: " ++ hhostRoot settings
+  putStrLn $ "Hosting folder " ++ hhostRoot settings ++ " on " ++ hhostHost settings ++ ":" ++ show (hhostPort settings)
 
   Warp.runSettings (Warp.setPort (hhostPort settings) Warp.defaultSettings) (app settings)
