@@ -41,17 +41,10 @@ first (a : b) f = f a >>= \case
   True  -> pure $ pure a
   False -> first b f
 
-doesFileExist' :: FilePath -> IO Bool
-doesFileExist' a = do
-  putStrLn $ "[doesFileExist'] Considering " ++ show a
-  res <- doesFileExist a
-  when res $ putStrLn "[doesFileExist'] Chosen"
-  pure res
-
 serveFile :: (Response -> IO w) -> [String] -> Status -> FilePath -> IO w
 serveFile respond tags code res = case takeExtension res of
     ".md" -> do
-      putStrLn $ "Response: " ++ formattedTags ++ "<Markdown as HTML> " ++ res
+      putStrLn $ " -> " ++ formattedTags ++ "<Markdown as HTML> " ++ res
 
       mdcont <- readFile res
       cont <- runIOorExplode $ do
@@ -63,7 +56,7 @@ serveFile respond tags code res = case takeExtension res of
         [("Content-Type", "text/html")]
         (BSL.fromStrict (Text.encodeUtf8 cont))
     _ -> do
-      putStrLn $ "Response: " ++ formattedTags ++ "<File> " ++ res
+      putStrLn $ " -> " ++ formattedTags ++ "<File> " ++ res
       respond $ responseFile
         code
         []
@@ -74,11 +67,10 @@ serveFile respond tags code res = case takeExtension res of
 
 app :: Settings -> Application
 app settings req respond = do
-  putStrLn $ replicate 70 '-'
   let requestString = joinPath (Text.unpack <$> pathInfo req)
-  putStrLn $ "Handling request: " ++ requestString
+  putStr $ requestString ++ ""
 
-  a <- first (fmap ($ requestString) (hhostPath settings)) doesFileExist'
+  a <- first (fmap ($ requestString) (hhostPath settings)) doesFileExist
   case a of
     Nothing  -> serveFile respond ["[404]"] status404 (hhost404 settings)
     Just res -> serveFile respond []        status200 res
