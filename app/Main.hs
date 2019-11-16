@@ -108,6 +108,6 @@ main = do
         , hhostFolder = absFldr
         }
 
-  putStrLn $ "Hosting folder:  " ++ hhostFolder settings
+  putStrLn $ "Hosting folder: " ++ hhostFolder settings
 
   Warp.runSettings (Warp.setPort (hhostPort settings) Warp.defaultSettings) (app settings)
