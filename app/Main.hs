@@ -63,7 +63,7 @@ doesFileExist' a = do
 serveFile :: (Response -> IO w) -> [String] -> Status -> FilePath -> IO w
 serveFile respond tags code res = case takeExtension res of
     ".md" -> do
-      putStrLn $ "Response: " ++ formattedTags ++ "<MarkDown as HTML> " ++ res
+      putStrLn $ "Response: " ++ formattedTags ++ "<Markdown as HTML> " ++ res
 
       mdcont <- readFile res
       cont <- runIOorExplode $ do
