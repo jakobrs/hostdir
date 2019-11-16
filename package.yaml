@@ -26,6 +26,7 @@ dependencies:
 - directory
 - text
 - pandoc
+- gitrev
 
 default-extensions:
 - CPP

@@ -1,4 +1,5 @@
 {-# LANGUAGE LambdaCase #-}
+{-# LANGUAGE TemplateHaskell #-}
 
 module Main where
 
@@ -7,6 +8,7 @@ import qualified Data.ByteString.Lazy      as BSL
 import           Data.String
 import qualified Data.Text                 as Text
 import qualified Data.Text.Encoding        as Text
+import           Development.GitRev
 import           Network.Wai
 import           Network.HTTP.Types.Status
 import qualified Network.Wai.Handler.Warp  as Warp
@@ -79,7 +81,7 @@ printVersion :: IO ()
 #ifdef RELEASE
 printVersion = putStrLn $ "hostdir v" ++ VERSION_hostdir
 #else
-printVersion = putStrLn $ "hostdir v" ++ VERSION_hostdir ++ ", compiled " ++ __DATE__ ++ " " ++ __TIME__
+printVersion = putStrLn $ "hostdir v" ++ VERSION_hostdir ++ ", commit " ++ take 7 $(gitHash) ++ if $(gitDirty) then "*" else ""
 #endif
 
 main :: IO ()
