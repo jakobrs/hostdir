@@ -3,17 +3,16 @@
 module Main where
 
 import           Control.Monad
-import qualified Data.ByteString as BS
-import qualified Data.ByteString.Lazy as BSL
-import qualified Data.Text as Text
-import qualified Data.Text.Encoding as Text
+import qualified Data.ByteString.Lazy      as BSL
+import qualified Data.Text                 as Text
+import qualified Data.Text.Encoding        as Text
+import           Network.Wai
+import           Network.HTTP.Types.Status
+import qualified Network.Wai.Handler.Warp  as Warp
 import           System.Directory
 import           System.Environment
 import           System.FilePath
 import           Text.Pandoc
-import           Network.Wai
-import           Network.HTTP.Types.Status
-import qualified Network.Wai.Handler.Warp as Warp
 
 {-
 
