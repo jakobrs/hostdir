@@ -25,12 +25,14 @@ optDescrs =
     , Option ""  ["path"] pathArg "TODO: add description of --path"
     , Option "r" ["root"] rootArg "Root folder"
     , Option ""  ["help"] helpArg "Show command usage"
+    , Option ""  ["404"]  _404Arg "404 page"
     ]
   where
-    portArg, hostArg, pathArg, rootArg :: ArgDescr Opt
+    portArg, hostArg, pathArg, rootArg, _404Arg :: ArgDescr Opt
     portArg = ReqArg portHandler                                              ""
     hostArg = ReqArg (\host -> Opt (\set -> pure (set { hhostHost = host }))) ""
     rootArg = ReqArg (\root -> Opt (\set -> pure (set { hhostRoot = root }))) ""
+    _404Arg = ReqArg (\_404 -> Opt (\set -> pure (set { hhost404  = _404 }))) ""
     pathArg = ReqArg (error "--path: NYI")                                    ""
     helpArg = NoArg (Opt (\set -> pure (set { hhostHelp = True })))
 
