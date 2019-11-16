@@ -22,15 +22,14 @@ import Opts
 
 {-
 
-  > hhost [args] <folder>
+  > hostdir [options]
 
   Arguments:
     --port        -p <port>         What port to listen on         (default: 8080)
-    --host        -h <host>         What host to listen on         (default: 0.0.0.0)
+    --host        -h <host>         What host to listen on         (default: 127.0.0.1)
+    --root        -r <root>         Root directory                 (default: /srv/www/html)
     --path           <path>         How to find the files
     --404            <page>         404                            (default: 404.html)
-    --ipv4        -4                Use IPv4
-    --ipv6        -6                Use IPv6
 
   Default path: "%:%/index.html:%.html"
 
