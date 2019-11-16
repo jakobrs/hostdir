@@ -14,7 +14,6 @@ import           Text.Pandoc
 import           Network.Wai
 import           Network.HTTP.Types.Status
 import qualified Network.Wai.Handler.Warp as Warp
-import           Network.Wai.Handler.WarpTLS
 
 {-
 
@@ -23,7 +22,6 @@ import           Network.Wai.Handler.WarpTLS
   Arguments:
     --port        -p <port>         What port to listen on         (default: 8080)
     --host        -h <host>         What host to listen on         (default: 0.0.0.0)
-    --tls         -t <cert> <key>   TLS certificate and key to use
     --path           <path>         How to find the files
     --404            <page>         404                            (default: 404.html)
     --ipv4        -4                Use IPv4
@@ -39,8 +37,6 @@ data Settings = Settings
   , hhostFolder :: String
   , hhostPath :: [String -> String]
   , hhost404 :: FilePath
-  , hhostCert :: FilePath
-  , hhostKey :: FilePath
   }
 
 defaultSettings :: Settings
@@ -50,8 +46,6 @@ defaultSettings = Settings
   , hhostFolder = "/srv/www/html"
   , hhostPath = [id, (</> "index.html"), (</> "index.md"), (++ ".html"), (++ ".md")]
   , hhost404 = "404.html"
-  , hhostCert = "cert.crt"
-  , hhostKey = "key.pem"
   }
 
 first :: Monad m => [a] -> (a -> m Bool) -> m (Maybe a)
@@ -110,19 +104,14 @@ main :: IO ()
 main = do
   args <- getArgs
 
-  [absFldr, absCert, absKey] <- makeAbsolute `mapM` args
+  [absFldr] <- makeAbsolute `mapM` args
 
   let settings = defaultSettings
         { hhostPath = fmap ((absFldr </>) .) (hhostPath defaultSettings)
         , hhost404 = absFldr </> hhost404 defaultSettings
         , hhostFolder = absFldr
-        , hhostCert = absCert
-        , hhostKey = absKey
         }
 
   putStrLn $ "Hosting folder:  " ++ hhostFolder settings
 
-  putStrLn $ "TLS certificate: " ++ hhostCert settings
-  putStrLn $ "TLS key:         " ++ hhostKey  settings
-
-  runTLS (tlsSettings (hhostCert settings) (hhostKey settings)) (Warp.setPort (hhostPort settings) Warp.defaultSettings) (app settings)
+  Warp.runSettings (Warp.setPort (hhostPort settings) Warp.defaultSettings) (app settings)

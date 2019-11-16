@@ -23,7 +23,6 @@ dependencies:
 - bytestring
 - directory
 - text
-- warp-tls
 - pandoc
 
 #library:
