@@ -27,6 +27,7 @@ dependencies:
 
 default-extensions:
 - CPP
+- OverloadedStrings
 
 #library:
 #  source-dirs: src
