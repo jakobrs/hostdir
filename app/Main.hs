@@ -21,11 +21,11 @@ import           Network.Wai.Handler.WarpTLS
   > hhost [args] <folder>
 
   Arguments:
-    --port        -p <port>         What port to listen on (default: 8080)
-    --host        -h <host>         What host to listen on (default: 0.0.0.0)
+    --port        -p <port>         What port to listen on         (default: 8080)
+    --host        -h <host>         What host to listen on         (default: 0.0.0.0)
     --tls         -t <cert> <key>   TLS certificate and key to use
-    --path           <path>         How to find the files (default: see below)
-    --404            <page>         404                   (default: 404.html)
+    --path           <path>         How to find the files
+    --404            <page>         404                            (default: 404.html)
     --ipv4        -4                Use IPv4
     --ipv6        -6                Use IPv6
 
@@ -120,7 +120,7 @@ main = do
         , hhostKey = absKey
         }
 
-  putStrLn $ "Hosting folder: " ++ hhostFolder settings
+  putStrLn $ "Hosting folder:  " ++ hhostFolder settings
 
   putStrLn $ "TLS certificate: " ++ hhostCert settings
   putStrLn $ "TLS key:         " ++ hhostKey  settings
