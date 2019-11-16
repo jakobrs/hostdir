@@ -9,10 +9,15 @@ import qualified Data.Text.Encoding        as Text
 import           Network.Wai
 import           Network.HTTP.Types.Status
 import qualified Network.Wai.Handler.Warp  as Warp
+import           System.Console.GetOpt
 import           System.Directory
 import           System.Environment
+import           System.Exit
 import           System.FilePath
 import           Text.Pandoc
+
+import Settings
+import Opts
 
 {-
 
@@ -29,23 +34,6 @@ import           Text.Pandoc
   Default path: "%:%/index.html:%.html"
 
 -}
-
-data Settings = Settings
-  { hhostPort :: Int
-  , hhostHost :: String
-  , hhostFolder :: String
-  , hhostPath :: [String -> String]
-  , hhost404 :: FilePath
-  }
-
-defaultSettings :: Settings
-defaultSettings = Settings
-  { hhostPort = 8080
-  , hhostHost = "0.0.0.0"
-  , hhostFolder = "/srv/www/html"
-  , hhostPath = [id, (</> "index.html"), (</> "index.md"), (++ ".html"), (++ ".md")]
-  , hhost404 = "404.html"
-  }
 
 first :: Monad m => [a] -> (a -> m Bool) -> m (Maybe a)
 first []      _ = pure $ Nothing
@@ -99,14 +87,15 @@ main :: IO ()
 main = do
   args <- getArgs
 
-  [absFldr] <- makeAbsolute `mapM` args
+  settings <- case applyOpts args defaultSettings of
+    Left  errs      -> putStrLn `mapM_` errs >> exitFailure
+    Right (set, []) -> makeSettingsAbsolute set
 
-  let settings = defaultSettings
-        { hhostPath = fmap ((absFldr </>) .) (hhostPath defaultSettings)
-        , hhost404 = absFldr </> hhost404 defaultSettings
-        , hhostFolder = absFldr
-        }
+  when (hhostHelp settings) $ do
+    putStrLn $ "host v" ++ VERSION_host ++ ", compiled " ++ __TIME__
+    putStr   $ usageInfo "" optDescrs
+    exitSuccess
 
-  putStrLn $ "Hosting folder: " ++ hhostFolder settings
+  putStrLn $ "Hosting folder: " ++ hhostRoot settings
 
   Warp.runSettings (Warp.setPort (hhostPort settings) Warp.defaultSettings) (app settings)
