@@ -75,6 +75,13 @@ app settings req respond = do
     Nothing  -> serveFile respond ["[404]"] status404 (hhost404 settings)
     Just res -> serveFile respond []        status200 res
 
+printVersion :: IO ()
+#ifdef RELEASE
+printVersion = putStrLn $ "hostdir v" ++ VERSION_hostdir
+#else
+printVersion = putStrLn $ "hostdir v" ++ VERSION_hostdir ++ ", compiled " ++ __DATE__ ++ " " ++ __TIME__
+#endif
+
 main :: IO ()
 main = do
   args <- getArgs
@@ -83,12 +90,12 @@ main = do
     Left  errs      -> putStrLn `mapM_` errs >> exitFailure
     Right (set, []) -> makeSettingsAbsolute set
 
+  when (hhostVer settings) $ do
+    printVersion
+    exitSuccess
+
   when (hhostHelp settings) $ do
-#ifdef RELEASE
-    putStrLn $ "hostdir v" ++ VERSION_hostdir
-#else
-    putStrLn $ "hostdir v" ++ VERSION_hostdir ++ ", compiled " ++ __DATE__ ++ " " ++ __TIME__
-#endif
+    printVersion
     putStr   $ usageInfo "" optDescrs
     putStrLn ""
     putStrLn "Valid arguments to --host:"

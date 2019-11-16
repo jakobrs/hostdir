@@ -10,6 +10,7 @@ data Settings = Settings
   , hhostPath :: [String -> String]
   , hhost404  :: FilePath
   , hhostHelp :: Bool
+  , hhostVer  :: Bool
   }
 
 defaultSettings :: Settings
@@ -20,6 +21,7 @@ defaultSettings = Settings
   , hhostPath = [id, (</> "index.html"), (</> "index.md"), (++ ".html"), (++ ".md")]
   , hhost404  = "404.html"
   , hhostHelp = False
+  , hhostVer  = False
   }
 
 makeSettingsAbsolute :: Settings -> IO Settings
