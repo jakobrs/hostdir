@@ -61,6 +61,30 @@ doesFileExist' a = do
   when res $ putStrLn "[doesFileExist'] Chosen"
   pure res
 
+serveFile :: (Response -> IO w) -> [String] -> Status -> FilePath -> IO w
+serveFile respond tags code res = case takeExtension res of
+    ".md" -> do
+      putStrLn $ "Response: " ++ formattedTags ++ "<MarkDown as HTML> " ++ res
+
+      mdcont <- readFile res
+      cont <- runIOorExplode $ do
+        v <- readMarkdown (def { readerStandalone = True }) $ Text.pack mdcont
+        writeHtml5String def v
+
+      respond $ responseLBS
+        code
+        [("Content-Type", "text/html")]
+        (BSL.fromStrict (Text.encodeUtf8 cont))
+    _ -> do
+      putStrLn $ "Response: " ++ formattedTags ++ "<File> " ++ res
+      respond $ responseFile
+        code
+        []
+        res
+        Nothing
+  where
+    formattedTags = tags >>= (++ " ")
+
 app :: Settings -> Application
 app settings req respond = do
   putStrLn $ replicate 70 '-'
@@ -69,36 +93,8 @@ app settings req respond = do
 
   a <- first (fmap ($ requestString) (hhostPath settings)) doesFileExist'
   case a of
-    Nothing -> do
-      let res = hhost404 settings
-      putStrLn $ "Response: [404] " ++ res
-      respond $ responseFile
-        notFound404
-        [("Content-Type", "text/html")]
-        res
-        Nothing
-
-    Just res ->
-      case takeExtension res of
-        ".md" -> do
-          putStrLn $ "Response: <MarkDown as HTML> " ++ res
-
-          mdcont <- readFile res
-          cont <- runIOorExplode $ do
-            v <- readMarkdown (def { readerStandalone = True }) $ Text.pack mdcont
-            writeHtml5String def v
-
-          respond $ responseLBS
-            ok200
-            [("Content-Type", "text/html")]
-            (BSL.fromStrict (Text.encodeUtf8 cont))
-        _ -> do
-          putStrLn $ "Response: " ++ res
-          respond $ responseFile
-            ok200
-            []
-            res
-            Nothing
+    Nothing  -> serveFile respond ["[404]"] status404 (hhost404 settings)
+    Just res -> serveFile respond []        status200 res
 
 main :: IO ()
 main = do
