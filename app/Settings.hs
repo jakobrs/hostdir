@@ -15,7 +15,7 @@ data Settings = Settings
 defaultSettings :: Settings
 defaultSettings = Settings
   { hhostPort = 8080
-  , hhostHost = "*"
+  , hhostHost = "127.0.0.1"
   , hhostRoot = "/srv/www/html"
   , hhostPath = [id, (</> "index.html"), (</> "index.md"), (++ ".html"), (++ ".md")]
   , hhost404  = "404.html"
