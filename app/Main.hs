@@ -93,7 +93,7 @@ main = do
     Right (set, []) -> makeSettingsAbsolute set
 
   when (hhostHelp settings) $ do
-    putStrLn $ "host v" ++ VERSION_host ++ ", compiled " ++ __TIME__
+    putStrLn $ "host v" ++ VERSION_host ++ ", compiled " ++ __DATE__ ++ " " ++ __TIME__
     putStr   $ usageInfo "" optDescrs
     putStrLn ""
     putStrLn "Valid arguments to --host:"
