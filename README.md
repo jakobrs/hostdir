@@ -9,7 +9,7 @@ hostdir v0.1.0.0
 
   -p   --port=           What port to listen on
   -h   --host=           What host to listen on
-       --path=           TODO: add description of --path
+       --path=           Set path
   -r   --root=           Root folder
        --help            Show command usage
        --404=            404 page
