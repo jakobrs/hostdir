@@ -5,7 +5,7 @@ Hosts a folder using http
 #### Command usage (from `--help`):
 
 ```
-hostdir v0.1.0.0, compiled Nov 17 2019 08:53:54
+hostdir v0.1.0.0
 
   -p   --port=           What port to listen on
   -h   --host=           What host to listen on
