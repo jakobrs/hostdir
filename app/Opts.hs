@@ -4,8 +4,6 @@ module Opts
   , applyOpts
   ) where
 
-import Data.Monoid
-import Data.Semigroup hiding (Option)
 import System.Console.GetOpt
 import Text.Read
 

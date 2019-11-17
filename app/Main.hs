@@ -74,6 +74,7 @@ main = do
   settings <- case applyOpts args defaultSettings of
     Left  errs      -> putStrLn `mapM_` errs >> exitFailure
     Right (set, []) -> makeSettingsAbsolute set
+    Right (_,   _ ) -> putStrLn "hostdir takes no non-option arguments" >> exitFailure
 
   when (hhostVer settings) $ do
     printVersion
