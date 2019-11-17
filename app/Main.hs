@@ -62,9 +62,9 @@ app settings req respond = do
 
 printVersion :: IO ()
 #ifdef RELEASE
-printVersion = putStrLn $ "hostdir v" ++ VERSION_hostdir
+printVersion = putStrLn $ "hostdir v" ++ CURRENT_PACKAGE_VERSION
 #else
-printVersion = putStrLn $ "hostdir v" ++ VERSION_hostdir ++ ", compiled " ++ __DATE__ ++ " " ++ __TIME__
+printVersion = putStrLn $ "hostdir v" ++ CURRENT_PACKAGE_VERSION ++ ", compiled " ++ __DATE__ ++ " " ++ __TIME__
 #endif
 
 main :: IO ()
