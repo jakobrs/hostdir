@@ -52,13 +52,23 @@ serveFile respond tags code res = case takeExtension res of
 
 app :: Settings -> Application
 app settings req respond = do
-  let requestString = joinPath (Text.unpack <$> pathInfo req)
-  putStr $ requestString ++ ""
+  let pathInfoReq = pathInfo req
+  let requestString = joinPath (Text.unpack <$> pathInfoReq)
 
-  a <- first (fmap ($ requestString) (hhostPath settings)) doesFileExist
-  case a of
-    Nothing  -> serveFile respond ["[404]"] status404 (hhost404 settings)
-    Just res -> serveFile respond []        status200 res
+  putStr requestString
+
+  -- Refuse to fulfill request if `..` found in the path
+  if ".." `elem` pathInfoReq then do
+    putStrLn " -> [403]"
+    respond $ responseLBS
+      status403
+      [("Content-Type", "text/plain")]
+      "Forbidden (suspicious request)"
+  else do
+    a <- first (fmap ($ requestString) (hhostPath settings)) doesFileExist
+    case a of
+      Nothing  -> serveFile respond ["[404]"] status404 (hhost404 settings)
+      Just res -> serveFile respond []        status200 res
 
 printVersion :: IO ()
 #ifdef RELEASE
