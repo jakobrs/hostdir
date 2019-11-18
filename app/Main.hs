@@ -21,7 +21,7 @@ import Settings
 import Opts
 
 first :: Monad m => [a] -> (a -> m Bool) -> m (Maybe a)
-first []      _ = pure $ Nothing
+first []      _ = pure Nothing
 first (a : b) f = f a >>= \case
   True  -> pure $ pure a
   False -> first b f
