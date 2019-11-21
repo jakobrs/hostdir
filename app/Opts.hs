@@ -26,9 +26,11 @@ optDescrs =
     , Option ""  ["help"] helpArg "Show command usage"
     , Option ""  ["404"]  _404Arg "404 page"
     , Option "V" ["version", "ver"] verArg "Show version"
+    , Option "l" ["dir", "listing", "list"] listArg "Show directory listings"
+    , Option "L" ["no-dir", "no-listing", "no-list"] noListArg "Don't show directory listings"
     ]
   where
-    portArg, hostArg, pathArg, rootArg, _404Arg, verArg :: ArgDescr Opt
+    portArg, hostArg, pathArg, rootArg, _404Arg, verArg, listArg, noListArg :: ArgDescr Opt
     portArg = ReqArg portHandler                                              ""
     hostArg = ReqArg (\host -> Opt (\set -> pure (set { hhostHost = host }))) ""
     rootArg = ReqArg (\root -> Opt (\set -> pure (set { hhostRoot = root }))) ""
@@ -36,6 +38,8 @@ optDescrs =
     pathArg = ReqArg (error "--path: NYI")                                    ""
     helpArg = NoArg (Opt (\set -> pure (set { hhostHelp = True })))
     verArg  = NoArg (Opt (\set -> pure (set { hhostVer  = True })))
+    listArg = NoArg (Opt (\set -> pure (set { hhostDirL = True })))
+    noListArg = NoArg (Opt (\set -> pure (set { hhostDirL = False })))
 
     portHandler :: String -> Opt
     portHandler str = Opt $ \set -> case readMaybe str of

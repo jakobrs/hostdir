@@ -9,6 +9,7 @@ data Settings = Settings
   , hhostRoot :: String
   , hhostPath :: [String -> String]
   , hhost404  :: FilePath
+  , hhostDirL :: Bool
   , hhostHelp :: Bool
   , hhostVer  :: Bool
   }
@@ -20,6 +21,7 @@ defaultSettings = Settings
   , hhostRoot = "."
   , hhostPath = [id, (</> "index.html"), (</> "index.md"), (++ ".html"), (++ ".md")]
   , hhost404  = "404.html"
+  , hhostDirL = True
   , hhostHelp = False
   , hhostVer  = False
   }

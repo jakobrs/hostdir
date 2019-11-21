@@ -50,6 +50,15 @@ serveFile respond tags code res = case takeExtension res of
   where
     formattedTags = tags >>= (++ " ")
 
+serveDirectory :: (Response -> IO w) -> FilePath -> IO w
+serveDirectory respond str = do
+  putStrLn $ " -> [Directory listing]"
+  files <- getDirectoryContents str
+  let files' = do
+        file <- files
+        ["* ", file, "\n"]
+  respond $ responseLBS status200 [] (BSL.concat (fromString <$> files'))
+
 app :: Settings -> Application
 app settings req respond = do
   let pathInfoReq = pathInfo req
@@ -65,10 +74,20 @@ app settings req respond = do
       [("Content-Type", "text/plain")]
       "Forbidden (suspicious request)"
   else do
-    a <- first (fmap ($ requestString) (hhostPath settings)) doesFileExist
+    let possiblePaths = fmap ($ requestString) (hhostPath settings)
+
+    a <- first possiblePaths doesFileExist
     case a of
-      Nothing  -> serveFile respond ["[404]"] status404 (hhost404 settings)
-      Just res -> serveFile respond []        status200 res
+      Just res -> serveFile respond [] status200 res
+      Nothing  ->
+        let res = hhostRoot settings </> requestString
+        in  doShowListing settings res >>= \case
+          True  -> serveDirectory respond res
+          False -> serveFile respond ["[404]"] status404 (hhost404 settings)
+
+doShowListing :: Settings -> FilePath -> IO Bool
+doShowListing set path | not (hhostDirL set) = pure False
+                       | otherwise           = doesDirectoryExist path
 
 printVersion :: IO ()
 #ifdef RELEASE
