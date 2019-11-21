@@ -55,6 +55,7 @@ app settings req respond = do
   let pathInfoReq = pathInfo req
   let requestString = joinPath (Text.unpack <$> pathInfoReq)
 
+  putStr $ "[" ++ show (remoteHost req) ++ "] "
   putStr requestString
 
   -- Refuse to fulfill request if `..` found in the path
