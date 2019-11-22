@@ -60,7 +60,7 @@ app settings req respond = do
 
   do
     time <- Time.getCurrentTime
-    putStr $ Time.formatTime Time.defaultTimeLocale "[%F %T%3Q] " time
+    putStr $ Time.formatTime Time.defaultTimeLocale "[%F %T%3Q %Z] " time
   putStr $ "<" ++ show (remoteHost req) ++ "> "
   putStr requestString
 
