@@ -6,6 +6,7 @@ module Opts
 
 import Control.Monad
 import System.Console.GetOpt
+import System.IO
 import Text.Read
 
 import Settings
@@ -26,9 +27,12 @@ optDescrs =
     , Option ""  ["help"] helpArg "Show command usage"
     , Option ""  ["404"]  _404Arg "404 page"
     , Option "V" ["version", "ver"] verArg "Show version"
+    , Option "B" ["no-buffer"] nobArg "Don't buffer output"
+    , Option "l" ["buffer-line", "buffer"] blArg "Use line buffering (default)"
+    , Option "b" ["buffer-block"] bbArg "Use block buffering"
     ]
   where
-    portArg, hostArg, pathArg, rootArg, _404Arg, verArg :: ArgDescr Opt
+    portArg, hostArg, pathArg, rootArg, _404Arg, verArg, nobArg, blArg, bbArg :: ArgDescr Opt
     portArg = ReqArg portHandler                                              ""
     hostArg = ReqArg (\host -> Opt (\set -> pure (set { hhostHost = host }))) ""
     rootArg = ReqArg (\root -> Opt (\set -> pure (set { hhostRoot = root }))) ""
@@ -36,6 +40,15 @@ optDescrs =
     pathArg = ReqArg (error "--path: NYI")                                    ""
     helpArg = NoArg (Opt (\set -> pure (set { hhostHelp = True })))
     verArg  = NoArg (Opt (\set -> pure (set { hhostVer  = True })))
+    nobArg  = NoArg (Opt (\set -> pure (set { hhostBuf  = NoBuffering })))
+    blArg   = NoArg (Opt (\set -> pure (set { hhostBuf  = LineBuffering })))
+    bbArg   = OptArg bbHandler ""
+
+    bbHandler :: Maybe String -> Opt
+    bbHandler Nothing = Opt (\set -> pure (set { hhostBuf = BlockBuffering Nothing }))
+    bbHandler (Just bs) = Opt $ \set -> case readMaybe bs of
+      Nothing -> Left $ "Block size doesn't parse: " ++ show bs
+      Just bs -> pure $ set { hhostBuf = BlockBuffering (Just bs) }
 
     portHandler :: String -> Opt
     portHandler str = Opt $ \set -> case readMaybe str of

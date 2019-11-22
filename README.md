@@ -7,13 +7,16 @@ Hosts a folder using http
 ```
 hostdir v0.1.0.0
 
-  -p   --port=           What port to listen on
-  -h   --host=           What host to listen on
-       --path=           TODO: add description of --path
-  -r   --root=           Root folder
-       --help            Show command usage
-       --404=            404 page
-  -V   --version, --ver  Show version
+  -p    --port=                  What port to listen on
+  -h    --host=                  What host to listen on
+        --path=                  TODO: add description of --path
+  -r    --root=                  Root folder
+        --help                   Show command usage
+        --404=                   404 page
+  -V    --version, --ver         Show version
+  -B    --no-buffer              Don't buffer output
+  -l    --buffer-line, --buffer  Use line buffering (default)
+  -b[]  --buffer-block[=]        Use block buffering
 
 Valid arguments to --host:
 - *   Any host, both IPv4 and IPv6

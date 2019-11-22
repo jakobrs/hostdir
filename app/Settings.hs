@@ -2,6 +2,7 @@ module Settings where
 
 import System.Directory
 import System.FilePath
+import System.IO
 
 data Settings = Settings
   { hhostPort :: Int
@@ -11,6 +12,7 @@ data Settings = Settings
   , hhost404  :: FilePath
   , hhostHelp :: Bool
   , hhostVer  :: Bool
+  , hhostBuf  :: BufferMode
   }
 
 defaultSettings :: Settings
@@ -22,6 +24,7 @@ defaultSettings = Settings
   , hhost404  = "404.html"
   , hhostHelp = False
   , hhostVer  = False
+  , hhostBuf  = LineBuffering
   }
 
 makeSettingsAbsolute :: Settings -> IO Settings

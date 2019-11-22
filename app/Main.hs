@@ -15,6 +15,7 @@ import           System.Directory
 import           System.Environment
 import           System.Exit
 import           System.FilePath
+import           System.IO
 import           Text.Pandoc
 
 import Settings
@@ -103,6 +104,8 @@ main = do
     putStrLn "- !6  Any host, only IPv6"
     putStrLn "Any other value is treated as a normal hostname."
     exitSuccess
+
+  hSetBuffering stdout (hhostBuf settings)
 
   putStrLn $ "Hosting folder " ++ hhostRoot settings ++ " on " ++ hhostHost settings ++ ":" ++ show (hhostPort settings)
 
