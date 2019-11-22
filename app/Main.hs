@@ -7,6 +7,8 @@ import qualified Data.ByteString.Lazy      as BSL
 import           Data.String
 import qualified Data.Text                 as Text
 import qualified Data.Text.Encoding        as Text
+import qualified Data.Time.Clock           as Time
+import qualified Data.Time.Format          as Time
 import           Network.Wai
 import           Network.HTTP.Types.Status
 import qualified Network.Wai.Handler.Warp  as Warp
@@ -56,7 +58,10 @@ app settings req respond = do
   let pathInfoReq = pathInfo req
   let requestString = joinPath (Text.unpack <$> pathInfoReq)
 
-  putStr $ "[" ++ show (remoteHost req) ++ "] "
+  do
+    time <- Time.getCurrentTime
+    putStr $ Time.formatTime Time.defaultTimeLocale "[%F %T%3Q] " time
+  putStr $ "<" ++ show (remoteHost req) ++ "> "
   putStr requestString
 
   -- Refuse to fulfill request if `..` found in the path
