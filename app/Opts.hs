@@ -55,7 +55,7 @@ optDescrs =
       Nothing            -> Left $ "Port doesn't parse: " ++ show str
       Just n | n < 0     -> Left $ "Port less than 0: " ++ show n
              | n > 65535 -> Left $ "Port greater than 65535: " ++ show n
-             | otherwise -> pure (set { hhostPort = n })
+             | otherwise -> pure $ set { hhostPort = n }
 
 parseOpts :: [String] -> ([Opt], [String], [String])
 parseOpts = getOpt Permute optDescrs
