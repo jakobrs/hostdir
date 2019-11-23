@@ -10,7 +10,6 @@ hostdir v0.1.0.0
   -p    --port=                  What port to listen on (default 8080)
   -h    --host=                  What host to listen on (default 127.0.0.1)
   -H    --any-host               Use host '*'
-        --path=                  TODO: add description of --path
   -r    --root=                  Root folder            (default .)
         --help                   Show command usage
         --404=                   404 page               (default 404.html)
