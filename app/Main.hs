@@ -20,8 +20,8 @@ import           System.FilePath
 import           System.IO
 import           Text.Pandoc
 
-import Settings
 import Opts
+import Settings
 
 first :: Monad m => [a] -> (a -> m Bool) -> m (Maybe a)
 first []      _ = pure Nothing

@@ -18,15 +18,15 @@ description:         See README.md
 
 dependencies:
 - base >= 4.7 && < 5
-- wai
-- warp
-- http-types
-- filepath
 - bytestring
 - directory
-- text
+- filepath
+- http-types
 - pandoc
+- text
 - time
+- wai
+- warp
 
 default-extensions:
 - CPP
