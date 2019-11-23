@@ -9,6 +9,7 @@ hostdir v0.1.0.0
 
   -p    --port=                  What port to listen on
   -h    --host=                  What host to listen on
+  -H    --any-host               Use host '*'
         --path=                  TODO: add description of --path
   -r    --root=                  Root folder
         --help                   Show command usage

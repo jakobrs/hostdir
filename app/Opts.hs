@@ -6,6 +6,7 @@ module Opts
 
 import Control.Monad
 import Data.String
+import Data.Streaming.Network.Internal
 import System.Console.GetOpt
 import System.IO
 import Text.Read
@@ -23,6 +24,7 @@ optDescrs :: [OptDescr Opt]
 optDescrs =
     [ Option "p" ["port"] portArg "What port to listen on"
     , Option "h" ["host"] hostArg "What host to listen on"
+    , Option "H" ["any-host"] anyhArg "Use host '*'"
     , Option ""  ["path"] pathArg "TODO: add description of --path"
     , Option "r" ["root"] rootArg "Root folder"
     , Option ""  ["help"] helpArg "Show command usage"
@@ -33,9 +35,10 @@ optDescrs =
     , Option "b" ["buffer-block"] bbArg "Use block buffering"
     ]
   where
-    portArg, hostArg, pathArg, rootArg, _404Arg, verArg, nobArg, blArg, bbArg :: ArgDescr Opt
+    portArg, hostArg, anyhArg, pathArg, rootArg, _404Arg, verArg, nobArg, blArg, bbArg :: ArgDescr Opt
     portArg = ReqArg portHandler                                                         ""
     hostArg = ReqArg (\host -> Opt (\set -> pure (set { hhostHost = fromString host }))) ""
+    anyhArg = NoArg           (Opt (\set -> pure (set { hhostHost = HostAny })))
     rootArg = ReqArg (\root -> Opt (\set -> pure (set { hhostRoot = root })))            ""
     _404Arg = ReqArg (\_404 -> Opt (\set -> pure (set { hhost404  = _404 })))            ""
     pathArg = ReqArg (error "--path: NYI")                                               ""
