@@ -22,17 +22,17 @@ instance Monoid Opt where
 
 optDescrs :: [OptDescr Opt]
 optDescrs =
-    [ Option "p" ["port"] portArg "What port to listen on"
-    , Option "h" ["host"] hostArg "What host to listen on"
-    , Option "H" ["any-host"] anyhArg "Use host '*'"
-    , Option ""  ["path"] pathArg "TODO: add description of --path"
-    , Option "r" ["root"] rootArg "Root folder"
-    , Option ""  ["help"] helpArg "Show command usage"
-    , Option ""  ["404"]  _404Arg "404 page"
-    , Option "V" ["version", "ver"] verArg "Show version"
-    , Option "B" ["no-buffer"] nobArg "Don't buffer output"
-    , Option "l" ["buffer-line", "buffer"] blArg "Use line buffering (default)"
-    , Option "b" ["buffer-block"] bbArg "Use block buffering"
+    [ Option "p" ["port"]                  portArg "What port to listen on (default 8080)"
+    , Option "h" ["host"]                  hostArg "What host to listen on (default 127.0.0.1)"
+    , Option "H" ["any-host"]              anyhArg "Use host '*'"
+    , Option ""  ["path"]                  pathArg "TODO: add description of --path"
+    , Option "r" ["root"]                  rootArg "Root folder            (default .)"
+    , Option ""  ["help"]                  helpArg "Show command usage"
+    , Option ""  ["404"]                   _404Arg "404 page               (default 404.html)"
+    , Option "V" ["version", "ver"]        verArg  "Show version"
+    , Option "B" ["no-buffer"]             nobArg  "Don't buffer output"
+    , Option "l" ["buffer-line", "buffer"] blArg   "Use line buffering (default)"
+    , Option "b" ["buffer-block"]          bbArg   "Use block buffering"
     ]
   where
     portArg, hostArg, anyhArg, pathArg, rootArg, _404Arg, verArg, nobArg, blArg, bbArg :: ArgDescr Opt
