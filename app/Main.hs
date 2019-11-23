@@ -20,6 +20,7 @@ import           System.FilePath
 import           System.IO
 import           Text.Pandoc
 
+import Lib
 import Opts
 import Settings
 
@@ -112,6 +113,6 @@ main = do
 
   hSetBuffering stdout (hhostBuf settings)
 
-  putStrLn $ "Hosting folder " ++ hhostRoot settings ++ " on " ++ hhostHost settings ++ ":" ++ show (hhostPort settings)
+  putStrLn $ "Hosting folder " ++ hhostRoot settings ++ " on " ++ ppHostPreference (hhostHost settings) ++ ":" ++ show (hhostPort settings)
 
-  Warp.runSettings (Warp.setHost (fromString (hhostHost settings)) (Warp.setPort (hhostPort settings) Warp.defaultSettings)) (app settings)
+  Warp.runSettings (Warp.setHost (hhostHost settings) (Warp.setPort (hhostPort settings) Warp.defaultSettings)) (app settings)

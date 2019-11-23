@@ -23,6 +23,7 @@ dependencies:
 - filepath
 - http-types
 - pandoc
+- streaming-commons
 - text
 - time
 - wai

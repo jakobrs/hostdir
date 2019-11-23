@@ -1,12 +1,13 @@
 module Settings where
 
+import Data.Streaming.Network
 import System.Directory
 import System.FilePath
 import System.IO
 
 data Settings = Settings
   { hhostPort :: Int
-  , hhostHost :: String
+  , hhostHost :: HostPreference
   , hhostRoot :: FilePath
   , hhostPath :: [FilePath -> FilePath]
   , hhost404  :: FilePath
