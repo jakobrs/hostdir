@@ -7,8 +7,8 @@ import System.IO
 data Settings = Settings
   { hhostPort :: Int
   , hhostHost :: String
-  , hhostRoot :: String
-  , hhostPath :: [String -> String]
+  , hhostRoot :: FilePath
+  , hhostPath :: [FilePath -> FilePath]
   , hhost404  :: FilePath
   , hhostHelp :: Bool
   , hhostVer  :: Bool
