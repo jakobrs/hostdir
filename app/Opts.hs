@@ -28,12 +28,12 @@ optDescrs =
     , Option "r" ["root"]                  rootArg "Root folder            (default .)"
     , Option "c" ["convert"]               convArg "Convert file formats"
     , Option "C" ["no-convert"]           nConvArg "Don't convert file formats"
-    , Option ""  ["help"]                  helpArg "Show command usage"
-    , Option ""  ["404"]                   _404Arg "404 page               (default 404.html)"
-    , Option "V" ["version", "ver"]        verArg  "Show version"
     , Option "B" ["no-buffer"]             nobArg  "Don't buffer output"
     , Option "l" ["buffer-line", "buffer"] blArg   "Use line buffering (default)"
     , Option "b" ["buffer-block"]          bbArg   "Use block buffering"
+    , Option ""  ["404"]                   _404Arg "404 page               (default 404.html)"
+    , Option ""  ["help"]                  helpArg "Show command usage"
+    , Option "V" ["version", "ver"]        verArg  "Show version"
     ]
   where
     portArg, hostArg, anyhArg, convArg, nConvArg, rootArg, _404Arg, verArg, nobArg, blArg, bbArg :: ArgDescr Opt

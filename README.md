@@ -13,12 +13,12 @@ hostdir v0.1.0.0
   -r    --root=                  Root folder            (default .)
   -c    --convert                Convert file formats
   -C    --no-convert             Don't convert file formats
-        --help                   Show command usage
-        --404=                   404 page               (default 404.html)
-  -V    --version, --ver         Show version
   -B    --no-buffer              Don't buffer output
   -l    --buffer-line, --buffer  Use line buffering (default)
   -b[]  --buffer-block[=]        Use block buffering
+        --404=                   404 page               (default 404.html)
+        --help                   Show command usage
+  -V    --version, --ver         Show version
 
 Valid arguments to --host:
 - *   Any host, both IPv4 and IPv6
