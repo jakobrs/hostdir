@@ -30,29 +30,42 @@ first (a : b) f = f a >>= \case
   True  -> pure $ pure a
   False -> first b f
 
-serveFile :: (Response -> IO w) -> Bool -> [String] -> Status -> FilePath -> IO w
-serveFile respond convert tags code res = case (convert, takeExtension res) of
-    (True, ".md") -> do
-      putStrLn $ " -> " ++ formattedTags ++ "<Markdown as HTML> " ++ res
+serve404 :: (Response -> IO w) -> FilePath -> IO w
+serve404 respond path = do
+  content <- doesFileExist path >>= \case
+    True -> do
+      putStrLn $ " -> [404] <File> " ++ path
+      BSL.readFile path
+    False -> do
+      putStrLn $ " -> [404] <Fallback>"
+      pure "File not found"
 
-      mdcont <- readFile res
-      cont <- runIOorExplode $ do
-        v <- readMarkdown (def { readerStandalone = True }) $ Text.pack mdcont
-        writeHtml5String def v
+  respond $ responseLBS
+    status404
+    []
+    content
 
-      respond $ responseLBS
-        code
-        [("Content-Type", "text/html")]
-        (BSL.fromStrict (Text.encodeUtf8 cont))
-    _ -> do
-      putStrLn $ " -> " ++ formattedTags ++ "<File> " ++ res
-      respond $ responseFile
-        code
-        []
-        res
-        Nothing
-  where
-    formattedTags = tags >>= (++ " ")
+serveFile :: (Response -> IO w) -> Bool -> FilePath -> IO w
+serveFile respond convert res = case (convert, takeExtension res) of
+  (True, ".md") -> do
+    putStrLn $ " -> <Markdown as HTML> " ++ res
+
+    mdcont <- readFile res
+    cont <- runIOorExplode $ do
+      v <- readMarkdown (def { readerStandalone = True }) $ Text.pack mdcont
+      writeHtml5String def v
+
+    respond $ responseLBS
+      status200
+      [("Content-Type", "text/html")]
+      (BSL.fromStrict (Text.encodeUtf8 cont))
+  _ -> do
+    putStrLn $ " -> <File> " ++ res
+    respond $ responseFile
+      status200
+      []
+      res
+      Nothing
 
 app :: Settings -> Application
 app settings req respond = do
@@ -76,8 +89,8 @@ app settings req respond = do
     let convert = hhostConv settings
     a <- first (fmap ($ requestString) (hhostPath settings)) doesFileExist
     case a of
-      Nothing  -> serveFile respond convert ["[404]"] status404 (hhost404 settings)
-      Just res -> serveFile respond convert []        status200 res
+      Nothing  -> serve404  respond (hhost404 settings)
+      Just res -> serveFile respond convert res
 
 printVersion :: IO ()
 #ifdef RELEASE
