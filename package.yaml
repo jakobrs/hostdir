@@ -19,6 +19,7 @@ description:         See README.md
 dependencies:
 - base >= 4.7 && < 5
 - bytestring
+- case-insensitive
 - directory
 - filepath
 - http-types

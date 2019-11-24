@@ -1,9 +1,11 @@
-{-# LANGUAGE LambdaCase #-}
+{-# LANGUAGE LambdaCase, ViewPatterns #-}
 
 module Main where
 
 import           Control.Monad
+import qualified Data.ByteString           as BS
 import qualified Data.ByteString.Lazy      as BSL
+import qualified Data.ByteString.Char8     as BSC
 import           Data.String
 import qualified Data.Text                 as Text
 import qualified Data.Text.Encoding        as Text
@@ -19,6 +21,8 @@ import           System.Exit
 import           System.FilePath
 import           System.IO
 import           Text.Pandoc
+import Text.Printf
+import qualified Data.CaseInsensitive as CI
 
 import Lib
 import Opts
@@ -72,11 +76,40 @@ app settings req respond = do
   let pathInfoReq = pathInfo req
   let requestString = joinPath (Text.unpack <$> pathInfoReq)
 
+#ifdef VERBOSE
+  putStrLn $ replicate 70 '-'
+  do
+    time <- Time.getCurrentTime
+    putStr $ Time.formatTime Time.defaultTimeLocale 
+             "Time:                 %F %T%3Q %Z \n" time
+  putStrLn $ "Method:               " ++ BSC.unpack (requestMethod req)
+  putStrLn $ "HTTP version:         " ++ show (httpVersion req)
+  putStrLn $ "Raw path info:        " ++ show (rawPathInfo req)
+  putStrLn $ "Raw query string:     " ++ show (rawQueryString req)
+  putStrLn   "Request headers:"
+  requestHeaders req `forM_` \(CI.original -> key, value) -> do
+    putStr "- "
+    let len = BS.length key
+    BSC.putStr key
+    putStr $ replicate (20 - len) ' '
+    putStrLn $ show value
+  putStrLn $ "Secure?               " ++ if (isSecure req) then "yes" else "no"
+  putStrLn $ "Path info:            " ++ show pathInfoReq
+  putStrLn $ "Query string:         " ++ show (queryString req)
+  putStrLn $ "Request body length:  " ++ show (requestBodyLength req)
+  putStrLn $ "Host:                 " ++ show (remoteHost req)
+  putStrLn $ "Body:"
+  do
+    body <- strictRequestBody req
+    BSL.putStrLn body
+  putStr $ "Response:"
+#else
   do
     time <- Time.getCurrentTime
     putStr $ Time.formatTime Time.defaultTimeLocale "[%F %T%3Q %Z] " time
   putStr $ "<" ++ show (remoteHost req) ++ "> "
   putStr requestString
+#endif
 
   -- Refuse to fulfill request if `..` is found in the path
   if ".." `elem` pathInfoReq then do
@@ -127,6 +160,9 @@ main = do
 
   hSetBuffering stdout (hhostBuf settings)
 
-  putStrLn $ "Hosting folder " ++ hhostRoot settings ++ " on " ++ ppHostPreference (hhostHost settings) ++ ":" ++ show (hhostPort settings)
+  putStr $ "Hosting folder " ++ hhostRoot settings ++ " on " ++ ppHostPreference (hhostHost settings) ++ ":" ++ show (hhostPort settings)
+  do
+    time <- Time.getCurrentTime
+    putStrLn $ Time.formatTime Time.defaultTimeLocale " [%F %T%3Q %Z] " time
 
   Warp.runSettings (Warp.setHost (hhostHost settings) (Warp.setPort (hhostPort settings) Warp.defaultSettings)) (app settings)
