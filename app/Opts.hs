@@ -26,6 +26,8 @@ optDescrs =
     , Option "h" ["host"]                  hostArg "What host to listen on (default 127.0.0.1)"
     , Option "H" ["any-host"]              anyhArg "Use host '*'"
     , Option "r" ["root"]                  rootArg "Root folder            (default .)"
+    , Option "c" ["convert"]               convArg "Convert file formats"
+    , Option "C" ["no-convert"]           nConvArg "Don't convert file formats"
     , Option ""  ["help"]                  helpArg "Show command usage"
     , Option ""  ["404"]                   _404Arg "404 page               (default 404.html)"
     , Option "V" ["version", "ver"]        verArg  "Show version"
@@ -34,17 +36,19 @@ optDescrs =
     , Option "b" ["buffer-block"]          bbArg   "Use block buffering"
     ]
   where
-    portArg, hostArg, anyhArg, rootArg, _404Arg, verArg, nobArg, blArg, bbArg :: ArgDescr Opt
-    portArg = ReqArg portHandler                                                         ""
-    hostArg = ReqArg (\host -> Opt (\set -> pure (set { hhostHost = fromString host }))) ""
-    anyhArg = NoArg           (Opt (\set -> pure (set { hhostHost = HostAny })))
-    rootArg = ReqArg (\root -> Opt (\set -> pure (set { hhostRoot = root })))            ""
-    _404Arg = ReqArg (\_404 -> Opt (\set -> pure (set { hhost404  = _404 })))            ""
-    helpArg = NoArg (Opt (\set -> pure (set { hhostHelp = True })))
-    verArg  = NoArg (Opt (\set -> pure (set { hhostVer  = True })))
-    nobArg  = NoArg (Opt (\set -> pure (set { hhostBuf  = NoBuffering })))
-    blArg   = NoArg (Opt (\set -> pure (set { hhostBuf  = LineBuffering })))
-    bbArg   = OptArg bbHandler ""
+    portArg, hostArg, anyhArg, convArg, nConvArg, rootArg, _404Arg, verArg, nobArg, blArg, bbArg :: ArgDescr Opt
+    portArg  = ReqArg portHandler                                                         ""
+    hostArg  = ReqArg (\host -> Opt (\set -> pure (set { hhostHost = fromString host }))) ""
+    anyhArg  = NoArg           (Opt (\set -> pure (set { hhostHost = HostAny })))
+    rootArg  = ReqArg (\root -> Opt (\set -> pure (set { hhostRoot = root })))            ""
+    convArg  = NoArg           (Opt (\set -> pure (set { hhostConv = True })))
+    nConvArg = NoArg           (Opt (\set -> pure (set { hhostConv = False })))
+    _404Arg  = ReqArg (\_404 -> Opt (\set -> pure (set { hhost404  = _404 })))            ""
+    helpArg  = NoArg (Opt (\set -> pure (set { hhostHelp = True })))
+    verArg   = NoArg (Opt (\set -> pure (set { hhostVer  = True })))
+    nobArg   = NoArg (Opt (\set -> pure (set { hhostBuf  = NoBuffering })))
+    blArg    = NoArg (Opt (\set -> pure (set { hhostBuf  = LineBuffering })))
+    bbArg    = OptArg bbHandler ""
 
     bbHandler :: Maybe String -> Opt
     bbHandler Nothing = Opt (\set -> pure (set { hhostBuf = BlockBuffering Nothing }))

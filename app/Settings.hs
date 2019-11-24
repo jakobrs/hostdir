@@ -10,6 +10,7 @@ data Settings = Settings
   , hhostHost :: HostPreference
   , hhostRoot :: FilePath
   , hhostPath :: [FilePath -> FilePath]
+  , hhostConv :: Bool
   , hhost404  :: FilePath
   , hhostHelp :: Bool
   , hhostVer  :: Bool
@@ -22,6 +23,7 @@ defaultSettings = Settings
   , hhostHost = "127.0.0.1"
   , hhostRoot = "."
   , hhostPath = [id, (</> "index.html"), (</> "index.md"), (++ ".html"), (++ ".md")]
+  , hhostConv = True
   , hhost404  = "404.html"
   , hhostHelp = False
   , hhostVer  = False

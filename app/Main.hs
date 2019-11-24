@@ -30,9 +30,9 @@ first (a : b) f = f a >>= \case
   True  -> pure $ pure a
   False -> first b f
 
-serveFile :: (Response -> IO w) -> [String] -> Status -> FilePath -> IO w
-serveFile respond tags code res = case takeExtension res of
-    ".md" -> do
+serveFile :: (Response -> IO w) -> Bool -> [String] -> Status -> FilePath -> IO w
+serveFile respond convert tags code res = case (convert, takeExtension res) of
+    (True, ".md") -> do
       putStrLn $ " -> " ++ formattedTags ++ "<Markdown as HTML> " ++ res
 
       mdcont <- readFile res
@@ -73,10 +73,11 @@ app settings req respond = do
       [("Content-Type", "text/plain")]
       "Forbidden (suspicious request)"
   else do
+    let convert = hhostConv settings
     a <- first (fmap ($ requestString) (hhostPath settings)) doesFileExist
     case a of
-      Nothing  -> serveFile respond ["[404]"] status404 (hhost404 settings)
-      Just res -> serveFile respond []        status200 res
+      Nothing  -> serveFile respond convert ["[404]"] status404 (hhost404 settings)
+      Just res -> serveFile respond convert []        status200 res
 
 printVersion :: IO ()
 #ifdef RELEASE
