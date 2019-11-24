@@ -65,7 +65,7 @@ app settings req respond = do
   putStr $ "<" ++ show (remoteHost req) ++ "> "
   putStr requestString
 
-  -- Refuse to fulfill request if `..` found in the path
+  -- Refuse to fulfill request if `..` is found in the path
   if ".." `elem` pathInfoReq then do
     putStrLn " -> [403]"
     respond $ responseLBS
