@@ -127,6 +127,6 @@ main = do
 
   hSetBuffering stdout (hhostBuf settings)
 
-  putStrLn $ "Hosting folder " ++ hhostRoot settings ++ " on " ++ ppHostPreference (hhostHost settings) ++ ":" ++ show (hhostPort settings)
+  putStrLn $ "Hosting folder " ++ hhostRoot settings ++ " on " ++ ppHostPreference (hhostHost settings) ++ " port " ++ show (hhostPort settings)
 
   Warp.runSettings (Warp.setHost (hhostHost settings) (Warp.setPort (hhostPort settings) Warp.defaultSettings)) (app settings)
