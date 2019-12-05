@@ -52,8 +52,8 @@ optDescrs =
 
     bbHandler :: Maybe String -> Opt
     bbHandler Nothing = Opt (\set -> pure (set { hhostBuf = BlockBuffering Nothing }))
-    bbHandler (Just bs) = Opt $ \set -> case readMaybe bs of
-      Nothing -> Left $ "Block size doesn't parse: " ++ show bs
+    bbHandler (Just bss) = Opt $ \set -> case readMaybe bss of
+      Nothing -> Left $ "Block size doesn't parse: " ++ show bss
       Just bs -> pure $ set { hhostBuf = BlockBuffering (Just bs) }
 
     portHandler :: String -> Opt

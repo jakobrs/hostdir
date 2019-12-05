@@ -4,7 +4,6 @@ module Main where
 
 import           Control.Monad
 import qualified Data.ByteString.Lazy      as BSL
-import           Data.String
 import qualified Data.Text                 as Text
 import qualified Data.Text.Encoding        as Text
 import qualified Data.Time.Clock           as Time
