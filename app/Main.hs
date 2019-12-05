@@ -3,17 +3,18 @@
 module Main where
 
 import           Control.Monad
-import qualified Data.ByteString           as BS
-import qualified Data.ByteString.Lazy      as BSL
-import qualified Data.ByteString.Char8     as BSC
+import qualified Data.ByteString            as BS
+import qualified Data.ByteString.Lazy       as BSL
+import qualified Data.ByteString.Char8      as BSC
+import qualified Data.ByteString.Lazy.Char8 as BSLC
 import           Data.String
-import qualified Data.Text                 as Text
-import qualified Data.Text.Encoding        as Text
-import qualified Data.Time.Clock           as Time
-import qualified Data.Time.Format          as Time
+import qualified Data.Text                  as Text
+import qualified Data.Text.Encoding         as Text
+import qualified Data.Time.Clock            as Time
+import qualified Data.Time.Format           as Time
 import           Network.Wai
 import           Network.HTTP.Types.Status
-import qualified Network.Wai.Handler.Warp  as Warp
+import qualified Network.Wai.Handler.Warp   as Warp
 import           System.Console.GetOpt
 import           System.Directory
 import           System.Environment
@@ -21,7 +22,6 @@ import           System.Exit
 import           System.FilePath
 import           System.IO
 import           Text.Pandoc
-import Text.Printf
 import qualified Data.CaseInsensitive as CI
 
 import Lib
@@ -101,7 +101,7 @@ app settings req respond = do
   putStrLn $ "Body:"
   do
     body <- strictRequestBody req
-    BSL.putStrLn body
+    BSLC.putStrLn body
   putStr $ "Response:"
 #else
   do
